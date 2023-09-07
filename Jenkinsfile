@@ -13,11 +13,12 @@ pipeline {
         // This can be http or https
         NEXUS_PROTOCOL = "http"
         // Where your Nexus is running
-        NEXUS_URL = "18.216.151.197:8081/"
+        NEXUS_URL = "18.221.189.193:8081/"
         // Repository where we will upload the artifact
-        NEXUS_REPOSITORY = "soanrqube"
+        NEXUS_REPOSITORY = "sonarqube"
         // Jenkins credential id to authenticate to Nexus OSS
         NEXUS_CREDENTIAL_ID = "nexus_keygen"
+	SCANNER_HOME = tool 'sonar_scanner'
     }
     stages {
         stage("clone code") {
@@ -33,10 +34,26 @@ pipeline {
                 script {
                     // If you are using Windows then you should use "bat" step
                     // Since unit testing is out of the scope we skip them
-                    sh 'mvn -Dmaven.test.failure.ignore=true install'
+                    sh 'mvn -Dmaven.test.failure.ignore=true clean install'
                 }
             }
         }
+	stage('SonarCloud') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+				sh '$SCANNER_HOME/bin/sonar-scanner \
+				-Dsonar.projectKey=Ncodeit \
+				-Dsonar.projectName=Ncodeit \
+				-Dsonar.projectVersion=2.0 \
+				-Dsonar.sources=/var/lib/jenkins/workspace/$JOB_NAME/src/ \
+				-Dsonar.binaries=target/classes/com/visualpathit/account/controller/ \
+				-Dsonar.junit.reportsPath=target/surefire-reports \
+				-Dsonar.jacoco.reportPath=target/jacoco.exec \
+				-Dsonar.java.binaries=src/com/room/sample '
+				
+		     }
+		}
+	    }
         stage("publish to nexus") {
             steps {
                 script {
