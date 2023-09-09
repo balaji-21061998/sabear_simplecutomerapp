@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label "master"
-    }
+    agent any
     tools {
         // Note: this should match with the tool name configured in your jenkins instance (JENKINS_URL/configureTools/)
         maven "MVN_HOME"
@@ -13,7 +11,7 @@ pipeline {
         // This can be http or https
         NEXUS_PROTOCOL = "http"
         // Where your Nexus is running
-        NEXUS_URL = "65.1.1.139:8081/"
+        NEXUS_URL = "18.221.189.193:8081/"
         // Repository where we will upload the artifact
         NEXUS_REPOSITORY = "sonarqube"
         // Jenkins credential id to authenticate to Nexus OSS
@@ -40,7 +38,7 @@ pipeline {
         }
 	stage('SonarCloud') {
             steps {
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('sonarqube_server') {
 				sh '$SCANNER_HOME/bin/sonar-scanner \
 				-Dsonar.projectKey=Ncodeit \
 				-Dsonar.projectName=Ncodeit \
@@ -96,6 +94,5 @@ pipeline {
                 }
             }
         }
-   }
+    }
 }
-	
