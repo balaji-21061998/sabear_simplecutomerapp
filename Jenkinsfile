@@ -96,8 +96,8 @@ pipeline {
                 }
             }
         }
-	    post {
-        always {
+	post {
+         always {
             script {
                 def slackMessage = """
                 Jenkins build '${currentBuild.fullDisplayName}' (${env.BUILD_URL}) has completed.
