@@ -22,9 +22,9 @@ pipeline {
 	 // Tomcat Manager username	 
         TOMCAT_MANAGER_USERNAME = 'admin' 
 	// Tomcat Manager password
-        TOMCAT_MANAGER_PASSWORD = 'password' 
+        TOMCAT_MANAGER_PASSWORD = 'admin' 
 	 // Name of your WAR file
-        WAR_FILE = 'your-app.war'
+        WAR_FILE = 'SimpleCustomerApp-31-SNAPSHOT.war'
 	 // Context path for your application
         CONTEXT_PATH = 'your-app'           
     }
@@ -109,7 +109,7 @@ pipeline {
                 // Deploy the WAR file to Tomcat using the Deploy to Container plugin.
                 // Replace 'Tomcat 8.x' with the version of your Tomcat server.
                 deployAdapter(
-                    adapters: [tomcat8(credentialsId: 'tomcat-credentials', url: env.TOMCAT_URL)],
+                    adapters: [tomcat8(credentialsId: 'tomcat', url: env.TOMCAT_URL)],
                     contextPath: env.CONTEXT_PATH,
                     war: env.WAR_FILE
                 )
