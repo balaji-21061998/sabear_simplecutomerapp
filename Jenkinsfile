@@ -18,7 +18,7 @@ pipeline {
         NEXUS_CREDENTIAL_ID = "nexus"
 	SCANNER_HOME = tool 'sonar_scanner'
 	// URL of your Tomcat server
-	TOMCAT_URL = 'http://localhost:8080' 
+	TOMCAT_URL = 'http://15.207.16.246:8082/' 
 	 // Tomcat Manager username	 
         TOMCAT_MANAGER_USERNAME = 'admin' 
 	// Tomcat Manager password
@@ -107,9 +107,9 @@ pipeline {
 	    stage('Deploy to Tomcat') {
             steps {
                 // Deploy the WAR file to Tomcat using the Deploy to Container plugin.
-                // Replace 'Tomcat 8.x' with the version of your Tomcat server.
+                // Replace 'Tomcat 9.x' with the version of your Tomcat server.
                 deployAdapter(
-                    adapters: [tomcat8(credentialsId: 'tomcat', url: env.TOMCAT_URL)],
+                    adapters: [tomcat9(credentialsId: 'tomcat', url: env.TOMCAT_URL)],
                     contextPath: env.CONTEXT_PATH,
                     war: env.WAR_FILE
                 )
