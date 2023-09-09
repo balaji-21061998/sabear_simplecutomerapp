@@ -96,5 +96,19 @@ pipeline {
                 }
             }
         }
+	    post {
+        always {
+            script {
+                def slackMessage = """
+                Jenkins build '${currentBuild.fullDisplayName}' (${env.BUILD_URL}) has completed.
+
+                **Status**: ${currentBuild.result}
+                **Branch**: ${env.BRANCH_NAME}
+                **Committer**: ${env.GIT_COMMITTER_NAME}
+                """
+                slackSend(channel: 'balajislack', color: 'good', message: slackMessage)
+            }
+        }
     }
 }
+}	
