@@ -17,6 +17,16 @@ pipeline {
         // Jenkins credential id to authenticate to Nexus OSS
         NEXUS_CREDENTIAL_ID = "nexus"
 	SCANNER_HOME = tool 'sonar_scanner'
+	// URL of your Tomcat server
+	TOMCAT_URL = 'http://localhost:8080' 
+	 // Tomcat Manager username	 
+        TOMCAT_MANAGER_USERNAME = 'admin' 
+	// Tomcat Manager password
+        TOMCAT_MANAGER_PASSWORD = 'password' 
+	 // Name of your WAR file
+        WAR_FILE = 'your-app.war'
+	 // Context path for your application
+        CONTEXT_PATH = 'your-app'           
     }
     stages {
         stage("clone code") {
@@ -94,5 +104,16 @@ pipeline {
                 }
             }
         }
+	    stage('Deploy to Tomcat') {
+            steps {
+                // Deploy the WAR file to Tomcat using the Deploy to Container plugin.
+                // Replace 'Tomcat 8.x' with the version of your Tomcat server.
+                deployAdapter(
+                    adapters: [tomcat8(credentialsId: 'tomcat-credentials', url: env.TOMCAT_URL)],
+                    contextPath: env.CONTEXT_PATH,
+                    war: env.WAR_FILE
+                )
+        }
     }
+}
 }
